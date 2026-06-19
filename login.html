@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gen Z EMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--accent:#7857ff;--accent-d:#5a3fd4;--bg:#f4f3ff;--text:#1c1535;--muted:#9591a8;--border:#e8e4ff;--err:#ef4444}
+body{font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;background:var(--bg);display:flex;align-items:center;justify-content:center}
+body::before{content:'';position:fixed;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(120,87,255,.12),transparent 65%);pointer-events:none}
+body::after{content:'';position:fixed;bottom:-200px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(90,63,212,.08),transparent 65%);pointer-events:none}
+
+.wrap{display:flex;width:840px;max-width:95vw;background:#fff;border-radius:24px;box-shadow:0 16px 64px rgba(120,87,255,.13);overflow:hidden;animation:up .5s cubic-bezier(.16,1,.3,1)}
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* Left Panel */
+.left{
+  width:40%;
+  background:linear-gradient(160deg,#8b6aff 0%,#6a3fd4 50%,#3d27a8 100%);
+  padding:48px 36px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;gap:28px;
+}
+.left::before{content:'';position:absolute;top:-100px;right:-100px;width:280px;height:280px;background:rgba(255,255,255,.07);border-radius:50%}
+.left::after{content:'';position:absolute;bottom:-80px;left:-80px;width:220px;height:220px;background:rgba(255,255,255,.05);border-radius:50%}
+
+/* Logo container */
+.logo-wrap{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;align-items:center;gap:0;
+}
+.logo-bg{
+  width:130px;height:130px;
+  background:rgba(255,255,255,.12);
+  border-radius:28px;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 8px 32px rgba(0,0,0,.15);
+  margin-bottom:20px;
+  padding:16px;
+}
+.logo-bg img{
+  width:100%;height:100%;object-fit:contain;
+}
+.brand-name{
+  font-size:20px;font-weight:800;color:#fff;
+  letter-spacing:2px;text-align:center;
+  text-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+.brand-sub{
+  font-size:10px;color:rgba(255,255,255,.6);
+  letter-spacing:2.5px;text-transform:uppercase;
+  margin-top:6px;text-align:center;
+}
+.brand-divider{
+  width:40px;height:2px;
+  background:rgba(255,255,255,.3);
+  border-radius:2px;
+  margin:12px auto 0;
+}
+
+/* Right Panel */
+.right{flex:1;padding:48px 44px;display:flex;flex-direction:column;justify-content:center}
+.tabs{display:flex;background:var(--bg);border-radius:9px;padding:3px;gap:3px;margin-bottom:28px}
+.tab{flex:1;padding:9px;border:none;background:transparent;border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s}
+.tab.on{background:#fff;color:var(--accent);box-shadow:0 2px 8px rgba(120,87,255,.12)}
+.head{margin-bottom:22px}
+.title{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+.sub{font-size:13px;color:var(--muted);margin-top:4px}
+.note{background:#ede9ff;border-radius:9px;padding:10px 13px;font-size:13px;color:var(--accent-d);margin-bottom:18px;font-weight:500}
+.f{margin-bottom:15px}
+.lbl{font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;display:block}
+.inp{width:100%;background:var(--bg);border:2px solid transparent;border-radius:9px;padding:11px 13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:all .2s}
+.inp:focus{background:#fff;border-color:var(--accent);box-shadow:0 0 0 4px rgba(120,87,255,.1)}
+.inp::placeholder{color:var(--muted)}
+.btn{width:100%;padding:13px;background:linear-gradient(135deg,#7857ff,#5a3fd4);border:none;border-radius:9px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(120,87,255,.35)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:9px 13px;font-size:13px;color:var(--err);margin-bottom:14px;display:none}
+.err.on{display:block}
+.sec{display:none}.sec.on{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- Left -->
+  <div class="left">
+    <div class="logo-wrap">
+      <div class="logo-bg">
+  
+      </div>
+      <div class="brand-name">GEN Z</div>
+      <div class="brand-sub">Employee Management System</div>
+      <div class="brand-divider"></div>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div class="right">
+    <div class="tabs">
+      <button class="tab on" onclick="sw('emp')">Employee Login</button>
+      <button class="tab" onclick="sw('admin')">Admin</button>
+    </div>
+    <!-- Employee Login -->
+    <div class="sec on" id="sec-emp">
+      <div class="head"><div class="title">Welcome back</div><div class="sub">Admin থেকে পাওয়া ID ও password দিন</div></div>
+      <div class="err" id="e-err"></div>
+      <div class="f"><span class="lbl">Employee ID</span><input class="inp" id="e-id" type="text" placeholder="EMP-001" autocomplete="off"></div>
+      <div class="f"><span class="lbl">Password</span><input class="inp" id="e-pass" type="password" placeholder="••••••••"></div>
+      <button class="btn" id="e-btn" onclick="empLogin()">Sign In</button>
+    </div>
+    <!-- Admin Login -->
+    <div class="sec" id="sec-admin">
+      <div class="head"><div class="title">Admin Access</div><div class="sub">Admin password দিন</div></div>
+      <div class="note">Admin account pre-configured — password only</div>
+      <div class="err" id="a-err"></div>
+      <div class="f"><span class="lbl">Password</span><input class="inp" id="a-pass" type="password" placeholder="••••••••"></div>
+      <button class="btn" id="a-btn" onclick="adminLogin()">Access Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const N8N = 'https://n8n.srv1590265.hstgr.cloud/webhook';
+const SUPA_URL = 'https://ahzjnnexzotraekwnquk.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoempubmV4em90cmFla3ducXVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5ODYzMDcsImV4cCI6MjA5NjU2MjMwN30.vXSJLIe_iVhDxN7Z4CDlahhy2R2e7aVQbwgU_mocC-A';
+const ADMIN_PASS = 'admin123';
+
+function sw(t){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('sec-'+t).classList.add('on');
+  document.querySelectorAll('.tab')[t==='emp'?0:1].classList.add('on');
+  document.querySelectorAll('.err').forEach(e=>{e.classList.remove('on');e.textContent='';});
+}
+function err(id,msg){const e=document.getElementById(id);e.textContent=msg;e.classList.add('on');}
+
+async function empLogin(){
+  const id=document.getElementById('e-id').value.trim();
+  const pass=document.getElementById('e-pass').value;
+  document.getElementById('e-err').classList.remove('on');
+  if(!id||!pass){err('e-err','ID এবং password দিন');return;}
+  const btn=document.getElementById('e-btn');
+  btn.disabled=true;btn.textContent='Verifying...';
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/employees?employee_id=eq.'+encodeURIComponent(id)+'&select=employee_id,name,department,designation,password,status',{
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+    });
+    const emps=await r.json();
+    if(!emps||emps.length===0){err('e-err','Employee ID পাওয়া যায়নি');btn.disabled=false;btn.textContent='Sign In';return;}
+    const emp=emps[0];
+    if(!emp.password){err('e-err','Password set নেই — admin কে বলুন');btn.disabled=false;btn.textContent='Sign In';return;}
+    if(emp.password!==pass){err('e-err','Password ভুল');btn.disabled=false;btn.textContent='Sign In';return;}
+    sessionStorage.setItem('ems_user',JSON.stringify({id:emp.employee_id,name:emp.name,role:'employee',department:emp.department||'',designation:emp.designation||''}));
+    location.href='employee-portal.html';
+  }catch(e){
+    err('e-err','Error: '+e.message);
+    btn.disabled=false;btn.textContent='Sign In';
+  }
+}
+
+function adminLogin(){
+  const pass=document.getElementById('a-pass').value;
+  document.getElementById('a-err').classList.remove('on');
+  if(!pass){err('a-err','Password দিন');return;}
+  if(pass!==ADMIN_PASS){err('a-err','Password ভুল');return;}
+  const btn=document.getElementById('a-btn');
+  btn.disabled=true;btn.textContent='Accessing...';
+  sessionStorage.setItem('ems_user',JSON.stringify({id:'admin',name:'Admin',role:'admin'}));
+  setTimeout(()=>location.href='employee-management.html',500);
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  if(document.getElementById('sec-emp').classList.contains('on'))empLogin();
+  else adminLogin();
+});
+</script>
+</body>
+</html>
