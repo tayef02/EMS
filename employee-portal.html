@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gen Z EMS — Employee Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--accent:#7857ff;--accent-d:#5a3fd4;--bg:#f4f3ff;--card:#fff;--text:#1c1535;--muted:#9591a8;--border:#e8e4ff;--danger:#ef4444;--success:#22c55e;--warning:#f59e0b}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);min-height:100vh;display:flex;color:var(--text)}
+.sidebar{width:220px;background:var(--card);min-height:100vh;position:fixed;display:flex;flex-direction:column;box-shadow:4px 0 20px rgba(120,87,255,.06);z-index:100}
+.sb-brand{padding:22px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent-d));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:9px}
+.sb-name{font-size:14px;font-weight:800}.sb-role{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.nav{padding:12px 8px;flex:1}
+.nav-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;padding:0 10px;margin:12px 0 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;cursor:pointer;transition:all .2s;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:2px;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--bg);color:var(--text)}
+.nav-item.on{background:rgba(120,87,255,.1);color:var(--accent)}
+.ni{font-size:14px;width:18px;text-align:center}
+.sb-user{padding:12px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-d));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;flex-shrink:0}
+.u-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px}
+.u-id{font-size:11px;color:var(--muted)}
+.logout{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px}
+.logout:hover{color:var(--danger)}
+.main{margin-left:220px;flex:1}
+.topbar{background:var(--card);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.page-title{font-size:17px;font-weight:800}
+.clock{font-size:13px;font-weight:600;color:var(--accent);background:rgba(120,87,255,.08);padding:5px 12px;border-radius:20px}
+.content{padding:22px 26px}
+.section{display:none}.section.on{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:20px}
+.stat{background:var(--card);border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(120,87,255,.06)}
+.stat-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.ic-p{background:rgba(120,87,255,.1)}.ic-g{background:rgba(34,197,94,.1)}.ic-o{background:rgba(245,158,11,.1)}.ic-r{background:rgba(239,68,68,.1)}
+.stat-val{font-size:24px;font-weight:800}.stat-lbl{font-size:12px;color:var(--muted);margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.widget{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 2px 10px rgba(120,87,255,.06)}
+.w-title{font-size:13px;font-weight:800;margin-bottom:14px}
+.big-time{font-size:32px;font-weight:800;color:var(--accent);letter-spacing:-1px}
+.big-date{font-size:12px;color:var(--muted);margin-top:2px}
+.btn{padding:9px 16px;border-radius:9px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-d));color:#fff}
+.btn-primary:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(120,87,255,.3)}
+.btn-success{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff}
+.btn-success:not(:disabled):hover{transform:translateY(-1px)}
+.btn-warning{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff}
+.btn-ghost{background:var(--bg);color:var(--text)}
+.btn-full{width:100%;justify-content:center;padding:12px}
+.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.b-present{background:rgba(34,197,94,.1);color:var(--success)}
+.b-late{background:rgba(245,158,11,.1);color:var(--warning)}
+.b-half{background:rgba(120,87,255,.1);color:var(--accent)}
+.b-pending{background:rgba(245,158,11,.1);color:var(--warning)}
+.b-approved{background:rgba(34,197,94,.1);color:var(--success)}
+.b-rejected{background:rgba(239,68,68,.1);color:var(--danger)}
+.b-active{background:rgba(34,197,94,.1);color:var(--success)}
+table{width:100%;border-collapse:collapse}
+th{padding:9px 14px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--border);font-weight:600}
+td{padding:11px 14px;font-size:13px;border-bottom:1px solid rgba(232,228,255,.4)}
+tr:last-child td{border:none}
+.prog{background:var(--border);border-radius:99px;height:5px;overflow:hidden;width:70px}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-d))}
+label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text)}
+input,select,textarea{background:var(--bg);border:2px solid transparent;border-radius:9px;padding:9px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:all .2s;width:100%;margin-top:5px}
+input:focus,select:focus,textarea:focus{background:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(120,87,255,.1)}
+input[readonly]{opacity:.7;cursor:not-allowed}
+textarea{resize:vertical;min-height:70px}
+.f{margin-bottom:14px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(6px);z-index:999;align-items:center;justify-content:center}
+.overlay.on{display:flex}
+.modal{background:var(--card);border-radius:16px;width:480px;max-width:93vw;max-height:86vh;overflow-y:auto;animation:mi .22s ease;box-shadow:0 20px 60px rgba(0,0,0,.12)}
+@keyframes mi{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.mh{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mt{font-size:15px;font-weight:800}
+.mc{background:none;border:none;cursor:pointer;font-size:17px;color:var(--muted)}
+.mb{padding:18px 20px}.mf{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.toasts{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:6px}
+.toast{background:var(--card);border-radius:10px;padding:10px 15px;display:flex;align-items:center;gap:8px;min-width:230px;box-shadow:0 4px 18px rgba(0,0,0,.08);animation:ti .22s ease;font-size:13px}
+@keyframes ti{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+.toast.s{border-left:3px solid var(--success)}.toast.e{border-left:3px solid var(--danger)}.toast.i{border-left:3px solid var(--accent)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sb-brand" style="display:flex;align-items:center;gap:10px;">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,#7857ff,#5a3fd4);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px">G</div>
+    <div>
+      <div class="sb-name">Gen Z EMS</div>
+      <div class="sb-role">Employee Portal</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="nav-lbl">Overview</div>
+    <button class="nav-item on" onclick="go('dashboard',this)"><span class="ni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>Dashboard</button>
+    <div class="nav-lbl">My Work</div>
+    <button class="nav-item" onclick="go('attendance',this)"><span class="ni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>Attendance</button>
+    <button class="nav-item" onclick="go('tasks',this)"><span class="ni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>My Tasks</button>
+    <button class="nav-item" onclick="go('leave',this)"><span class="ni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Leave Request</button>
+  </nav>
+  <div class="sb-user">
+    <div class="avatar" id="av">?</div>
+    <div style="overflow:hidden">
+      <div class="u-name" id="uname">—</div>
+      <div class="u-id" id="uid">—</div>
+    </div>
+    <button class="logout" onclick="logout()">⏻</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="ptitle">Dashboard</div>
+    <div class="clock" id="clk">--:--</div>
+  </div>
+  <div class="content">
+
+    <!-- Dashboard -->
+    <div class="section on" id="sec-dashboard">
+      <div class="stats">
+        <div class="stat"><div class="stat-icon ic-p"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7857ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><div class="stat-val" id="d-tasks">—</div><div class="stat-lbl">My Tasks</div></div>
+        <div class="stat"><div class="stat-icon ic-g"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="stat-val" id="d-done">—</div><div class="stat-lbl">Completed</div></div>
+        <div class="stat"><div class="stat-icon ic-o"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="stat-val" id="d-leaves">—</div><div class="stat-lbl">Leaves Taken</div></div>
+        <div class="stat"><div class="stat-icon ic-r"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="stat-val" id="d-att">—</div><div class="stat-lbl">Present Days</div></div>
+      </div>
+      <div class="grid2">
+        <div class="widget">
+          <div class="w-title">Quick Check In/Out</div>
+          <div class="big-time" id="d-clock">--:--:--</div>
+          <div class="big-date" id="d-date">--</div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button class="btn btn-success" id="q-in" onclick="go('attendance',document.querySelector('[onclick*=attendance]'));doCheckIn()" style="flex:1;justify-content:center">Check In</button>
+            <button class="btn btn-warning" id="q-out" onclick="go('attendance',document.querySelector('[onclick*=attendance]'));doCheckOut()" style="flex:1;justify-content:center" disabled>Check Out</button>
+          </div>
+          <div id="ci-status" style="font-size:12px;color:var(--muted);margin-top:7px;text-align:center"></div>
+        </div>
+        <div class="widget">
+          <div class="w-title">Active Tasks</div>
+          <div id="d-task-list" style="color:var(--muted);font-size:13px">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance -->
+    <div class="section" id="sec-attendance">
+      <div class="grid2" style="margin-bottom:18px">
+        <div class="widget">
+          <div class="w-title">Check In</div>
+          <div class="big-time" id="a-clk">--:--:--</div>
+          <div class="big-date" id="a-date">--</div>
+          <button class="btn btn-success btn-full" id="btn-in" onclick="doCheckIn()" style="margin-top:14px">Check In Now</button>
+          <div id="in-info" style="font-size:12px;color:var(--muted);margin-top:6px;text-align:center"></div>
+        </div>
+        <div class="widget">
+          <div class="w-title">Check Out</div>
+          <div class="big-time" id="a-clk2" style="color:var(--warning)">--:--:--</div>
+          <div class="big-date" id="a-date2">--</div>
+          <button class="btn btn-warning btn-full" id="btn-out" onclick="doCheckOut()" style="margin-top:14px" disabled>Check Out</button>
+          <div id="out-info" style="font-size:12px;color:var(--muted);margin-top:6px;text-align:center"></div>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="w-title">My Attendance History</div>
+        <table><thead><tr><th>Date</th><th>Check In</th><th>Check Out</th><th>Hours</th><th>Status</th></tr></thead>
+        <tbody id="att-tb"><tr><td colspan="5" style="text-align:center;padding:22px;color:var(--muted)">Loading...</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- Tasks -->
+    <div class="section" id="sec-tasks">
+      <div class="widget">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="w-title" style="margin:0">My Tasks</div>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px" onclick="loadMyTasks()">Refresh</button>
+        </div>
+        <table><thead><tr><th>Task</th><th>Priority</th><th>Deadline</th><th>Progress</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="task-tb"><tr><td colspan="6" style="text-align:center;padding:22px;color:var(--muted)">Loading...</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- Leave -->
+    <div class="section" id="sec-leave">
+      <div class="grid2" style="align-items:start">
+        <div class="widget">
+          <div class="w-title">New Leave Request</div>
+          <div class="f"><label>Leave Type</label>
+            <select id="lv-type"><option>Sick Leave</option><option>Casual Leave</option><option>Annual Leave</option><option>Maternity Leave</option></select>
+          </div>
+          <div class="fg" style="margin-bottom:14px">
+            <div class="f" style="margin:0"><label>From Date</label><input id="lv-from" type="date" onchange="calcDays()"></div>
+            <div class="f" style="margin:0"><label>To Date</label><input id="lv-to" type="date" onchange="calcDays()"></div>
+          </div>
+          <div class="f"><label>Total Days</label><input id="lv-days" type="number" readonly></div>
+          <div class="f"><label>Reason</label><textarea id="lv-reason" placeholder="কারণ লিখুন..."></textarea></div>
+          <button class="btn btn-primary btn-full" onclick="submitLeave()">Submit Request</button>
+        </div>
+        <div class="widget">
+          <div class="w-title">My Leave History</div>
+          <div id="lv-hist" style="font-size:13px;color:var(--muted)">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Update Task Modal -->
+<div class="overlay" id="m-update">
+  <div class="modal">
+    <div class="mh"><div class="mt">Update Task Progress</div><button class="mc" onclick="closeModal()">✕</button></div>
+    <div class="mb">
+      <div style="background:var(--bg);border-radius:9px;padding:11px;margin-bottom:14px">
+        <div style="font-size:11px;color:var(--muted)">Task</div>
+        <div style="font-weight:700;font-size:14px" id="m-task-title">—</div>
+        <input type="hidden" id="m-task-id">
+      </div>
+      <div class="fg" style="margin-bottom:12px">
+        <div class="f" style="margin:0"><label>Progress %</label><input id="m-prog" type="number" min="0" max="100" placeholder="65"></div>
+        <div class="f" style="margin:0"><label>Hours Spent</label><input id="m-hrs" type="number" step="0.5" placeholder="4"></div>
+      </div>
+      <div class="f"><label>Work Done Today</label><textarea id="m-work" placeholder="আজকে কী করলেন..."></textarea></div>
+      <div class="f"><label>Next Plan</label><textarea id="m-next" placeholder="পরবর্তী পদক্ষেপ..." style="min-height:56px"></textarea></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitUpdate()">Save Update</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+const W = 'https://n8n.srv1590265.hstgr.cloud/webhook';
+const SUPA_URL = 'https://ahzjnnexzotraekwnquk.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoempubmV4em90cmFla3ducXVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5ODYzMDcsImV4cCI6MjA5NjU2MjMwN30.vXSJLIe_iVhDxN7Z4CDlahhy2R2e7aVQbwgU_mocC-A';
+const SH = {'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY};
+async function sb(path){ const r=await fetch(SUPA_URL+path,{headers:SH}); return r.json(); }
+let ME = null;
+
+(function(){
+  const u=sessionStorage.getItem('ems_user');
+  if(!u){location.href='login.html';return;}
+  ME=JSON.parse(u);
+  if(ME.role!=='employee'){location.href='employee-management.html';return;}
+  document.getElementById('uname').textContent=ME.name||ME.id;
+  document.getElementById('uid').textContent=ME.id;
+  document.getElementById('av').textContent=(ME.name||ME.id)[0].toUpperCase();
+})();
+
+function logout(){sessionStorage.removeItem('ems_user');location.href='login.html';}
+
+function dhakaTime(){return new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Dhaka'}));}
+function fmt24(d){return d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Dhaka'});}
+function fmtDate(d){return d.toLocaleDateString('en-CA',{timeZone:'Asia/Dhaka'});}
+function fmtFull(d){return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true,timeZone:'Asia/Dhaka'});}
+
+setInterval(function(){
+  const now=dhakaTime();
+  const t=fmtFull(now);
+  const dt=now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric',timeZone:'Asia/Dhaka'});
+  ['d-clock','a-clk','a-clk2'].forEach(function(id){const el=document.getElementById(id);if(el)el.textContent=t;});
+  ['d-date','a-date','a-date2'].forEach(function(id){const el=document.getElementById(id);if(el)el.textContent=dt;});
+  document.getElementById('clk').textContent=t;
+},1000);
+
+function go(id,el){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('on');});
+  document.getElementById('sec-'+id).classList.add('on');
+  if(el)el.classList.add('on');
+  var t={dashboard:'Dashboard',attendance:'My Attendance',tasks:'My Tasks',leave:'Leave Request'};
+  document.getElementById('ptitle').textContent=t[id]||id;
+  if(id==='tasks')loadMyTasks();
+  if(id==='leave'){calcDays();loadLeaveHistory();}
+  if(id==='attendance')loadAttHistory();
+}
+
+function toast(msg,t){
+  t=t||'i';
+  var e=document.createElement('div');
+  var icons={s:'OK',e:'ERR',i:'...'};
+  e.className='toast '+t;
+  e.innerHTML='<span>'+icons[t]+'</span><span>'+msg+'</span>';
+  document.getElementById('toasts').appendChild(e);
+  setTimeout(function(){e.remove();},3500);
+}
+
+async function api(url,method,data){
+  method=method||'GET';data=data||null;
+  try{
+    var o={method:method,headers:{'Content-Type':'application/json'}};
+    if(data&&method!=='GET')o.body=JSON.stringify(data);
+    var r=await fetch(url,o);
+    var t=await r.text();
+    if(!t.trim())return{success:true};
+    return JSON.parse(t);
+  }catch(e){return null;}
+}
+
+function ciKey(){return 'ems_ci_'+ME.id;}
+function loadCI(){
+  try{
+    var s=localStorage.getItem(ciKey());
+    if(!s)return null;
+    var r=JSON.parse(s);
+    if(r.date!==fmtDate(dhakaTime())){localStorage.removeItem(ciKey());return null;}
+    return r;
+  }catch(e){return null;}
+}
+function saveCI(r){localStorage.setItem(ciKey(),JSON.stringify(r));}
+
+function updateCIUI(){
+  var ci=loadCI();
+  var btnIn=document.getElementById('btn-in');
+  var btnOut=document.getElementById('btn-out');
+  var qIn=document.getElementById('q-in');
+  var qOut=document.getElementById('q-out');
+  var inInfo=document.getElementById('in-info');
+  var outInfo=document.getElementById('out-info');
+  var status=document.getElementById('ci-status');
+  if(ci&&!ci.check_out){
+    if(btnIn){btnIn.disabled=true;btnIn.textContent='Checked In';}
+    if(btnOut){btnOut.disabled=false;btnOut.textContent='Check Out';}
+    if(qIn){qIn.disabled=true;qIn.textContent='Checked In';}
+    if(qOut)qOut.disabled=false;
+    if(inInfo)inInfo.textContent='Checked in: '+ci.time+' — '+ci.status;
+    if(outInfo)outInfo.textContent='Ready to check out';
+    if(status)status.textContent='Checked in at '+ci.time;
+  }else if(ci&&ci.check_out){
+    if(btnIn){btnIn.disabled=true;btnIn.textContent='Day Complete';}
+    if(btnOut){btnOut.disabled=true;btnOut.textContent='Checked Out';}
+    if(qIn){qIn.disabled=true;qIn.textContent='Day Complete';}
+    if(qOut){qOut.disabled=true;qOut.textContent='Done';}
+    if(inInfo)inInfo.textContent='In: '+ci.time+' | Out: '+ci.check_out;
+    if(outInfo)outInfo.textContent='Total: '+ci.hours+'h';
+    if(status)status.textContent='Today: '+ci.hours+'h';
+  }else{
+    if(btnIn){btnIn.disabled=false;btnIn.textContent='Check In Now';}
+    if(btnOut){btnOut.disabled=true;btnOut.textContent='Check Out';}
+    if(qIn){qIn.disabled=false;qIn.textContent='Check In';}
+    if(qOut)qOut.disabled=true;
+    if(inInfo)inInfo.textContent='Not checked in yet';
+    if(outInfo)outInfo.textContent='Check in first';
+    if(status)status.textContent='';
+  }
+}
+
+async function doCheckIn(){
+  var ci=loadCI();
+  if(ci&&!ci.check_out){toast('Already checked in today','e');return;}
+  if(ci&&ci.check_out){toast('Day already complete','e');return;}
+  var now=dhakaTime();
+  var time24=fmt24(now);
+  var date=fmtDate(now);
+  var h=now.getHours(),m=now.getMinutes();
+  var status=(h<9||(h===9&&m<=15))?'Present':'Late';
+  if(document.getElementById('btn-in'))document.getElementById('btn-in').disabled=true;
+  toast('Check In হচ্ছে...','i');
+  var r=await api(W+'/attendance/record','POST',{employee_id:ME.id,name:ME.name,date:date,check_in:time24,status:status});
+  if(r!==null){
+    saveCI({date:date,time:fmtFull(now),time24:time24,status:status});
+    toast('Check In! ('+fmtFull(now)+') — '+status,'s');
+    updateCIUI();
+    loadAttHistory();
+  }else{
+    toast('Failed','e');
+    updateCIUI();
+  }
+}
+
+async function doCheckOut(){
+  var ci=loadCI();
+  if(!ci||ci.check_out){toast('Check in করুন আগে','e');return;}
+  var now=dhakaTime();
+  var out24=fmt24(now);
+  var date=fmtDate(now);
+  var parts1=ci.time24.split(':').map(Number);
+  var parts2=out24.split(':').map(Number);
+  var hours=Math.max(0,((parts2[0]*60+parts2[1])-(parts1[0]*60+parts1[1]))/60).toFixed(2);
+  var status=parseFloat(hours)<4?'Half Day':'Present';
+  if(document.getElementById('btn-out'))document.getElementById('btn-out').disabled=true;
+  toast('Check Out হচ্ছে...','i');
+  var r=await api(W+'/attendance/checkout','POST',{employee_id:ME.id,name:ME.name,date:date,check_in:ci.time24,check_out:out24,total_hours:hours,status:status});
+  if(r!==null){
+    var newCI=Object.assign({},ci,{check_out:fmtFull(now),hours:hours});
+    saveCI(newCI);
+    toast('Check Out! Total: '+hours+'h','s');
+    updateCIUI();
+    loadAttHistory();
+  }else{
+    toast('Failed','e');
+    updateCIUI();
+  }
+}
+
+async function loadAttHistory(){
+  var tb=document.getElementById('att-tb');
+  if(!tb)return;
+  var all=await sb('/rest/v1/attendance?employee_id=eq.'+encodeURIComponent(ME.id)+'&order=id.desc');
+  if(!Array.isArray(all)){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--danger)">Failed</td></tr>';return;}
+  document.getElementById('d-att').textContent=all.filter(function(a){return a.status==='Present'||a.status==='Late';}).length;
+  if(!all.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">কোনো record নেই</td></tr>';return;}
+  tb.innerHTML=all.slice(0,10).map(function(a){
+    var s=a.status||'';
+    var bc=s==='Present'?'b-present':s==='Late'?'b-late':'b-half';
+    return '<tr><td>'+(a.date||'—')+'</td><td>'+(a.check_in||'—')+'</td><td>'+(a.check_out||'—')+'</td><td>'+(a.total_hours||'—')+'</td><td><span class="badge '+bc+'">'+(s||'—')+'</span></td></tr>';
+  }).join('');
+}
+
+async function loadMyTasks(){
+  var tb=document.getElementById('task-tb');
+  var dl=document.getElementById('d-task-list');
+  var mine=await sb('/rest/v1/tasks?assigned_to=eq.'+encodeURIComponent(ME.id)+'&order=id.desc');
+  if(!Array.isArray(mine)){if(tb)tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--danger)">Failed</td></tr>';return;}
+  document.getElementById('d-tasks').textContent=mine.filter(function(t){return t.status!=='Completed';}).length;
+  document.getElementById('d-done').textContent=mine.filter(function(t){return t.status==='Completed';}).length;
+  if(dl){
+    var active=mine.filter(function(t){return t.status!=='Completed';}).slice(0,4);
+    if(active.length){
+      dl.innerHTML=active.map(function(t){
+        return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">'
+          +'<div><div style="font-weight:600">'+(t.title||'—')+'</div>'
+          +'<div style="font-size:11px;color:var(--muted)">Deadline: '+(t.deadline||'—')+'</div></div>'
+          +'<div><div class="prog" style="width:70px"><div class="prog-fill" style="width:'+(t.progress||0)+'%"></div></div>'
+          +'<div style="font-size:11px;color:var(--muted);text-align:right">'+(t.progress||0)+'%</div></div></div>';
+      }).join('');
+    }else{
+      dl.innerHTML='<div style="color:var(--muted);text-align:center;padding:16px">No active tasks</div>';
+    }
+  }
+  if(!tb)return;
+  if(!mine.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">কোনো task নেই</td></tr>';return;}
+  tb.innerHTML=mine.map(function(t){
+    var rawS=t.status||'Pending';
+    var p=parseInt(t.progress||0);
+    var pr=t.priority||'Medium';
+    var dl2=t.deadline||'—';
+    var now=new Date();
+    var isDone=rawS==='Completed'||p===100;
+    var todayStr=fmtDate(dhakaTime());
+    var isOverdue=dl2!=='—'&&dl2<todayStr&&!isDone;
+    var displayS,bc;
+    if(isDone){displayS='Completed';bc='b-approved';}
+    else if(isOverdue){displayS='Overdue';bc='b-rejected';}
+    else if(p>0){displayS='In Progress';bc='b-active';}
+    else{displayS='Pending';bc='b-pending';}
+    var pc=pr==='High'?'color:var(--danger)':pr==='Medium'?'color:var(--warning)':'color:var(--accent)';
+    var tid=String(t.task_id||'');
+    var ttl=String(t.title||'').replace(/"/g,'');
+    var actionCell=isDone
+      ?'<span style="font-size:12px;color:var(--muted)">Done</span>'
+      :'<button class="btn btn-ghost" style="font-size:12px;padding:5px 10px" onclick="openUpdate(this)">Update</button>';
+    return '<tr data-tid="'+tid+'" data-ttl="'+ttl+'" data-prog="'+p+'">'
+      +'<td><strong>'+(t.title||'—')+'</strong></td>'
+      +'<td><span style="font-weight:700;'+pc+'">'+pr+'</span></td>'
+      +'<td>'+dl2+'</td>'
+      +'<td><div style="display:flex;align-items:center;gap:5px"><div class="prog"><div class="prog-fill" style="width:'+p+'%"></div></div><span style="font-size:11px;color:var(--muted)">'+p+'%</span></div></td>'
+      +'<td><span class="badge '+bc+'">'+displayS+'</span></td>'
+      +'<td>'+actionCell+'</td>'
+      +'</tr>';
+  }).join('');
+}
+
+function openUpdate(btn){
+  var row=btn.closest('tr');
+  var tid=row.dataset.tid;
+  var ttl=row.dataset.ttl;
+  var prog=row.dataset.prog;
+  document.getElementById('m-task-id').value=tid;
+  document.getElementById('m-task-title').textContent=ttl;
+  document.getElementById('m-prog').value=prog||0;
+  document.getElementById('m-hrs').value='';
+  document.getElementById('m-work').value='';
+  document.getElementById('m-next').value='';
+  document.getElementById('m-update').classList.add('on');
+}
+
+function closeModal(){document.getElementById('m-update').classList.remove('on');}
+document.getElementById('m-update').addEventListener('click',function(e){if(e.target===document.getElementById('m-update'))closeModal();});
+
+async function submitUpdate(){
+  var id=document.getElementById('m-task-id').value;
+  var prog=parseInt(document.getElementById('m-prog').value||0);
+  if(!document.getElementById('m-prog').value){toast('Progress % দিন','e');return;}
+  if(prog>100){prog=100;document.getElementById('m-prog').value=100;}
+  if(prog<0){prog=0;document.getElementById('m-prog').value=0;}
+  toast('Saving...','i');
+  var r=await api(W+'/task/daily-update','POST',{
+    task_id:id,employee_id:ME.id,employee_name:ME.name,
+    date:fmtDate(dhakaTime()),progress:prog,
+    hours_spent:document.getElementById('m-hrs').value,
+    work_done:document.getElementById('m-work').value,
+    next_plan:document.getElementById('m-next').value,
+    challenges:''
+  });
+  if(r!==null){
+    if(prog===100){
+      await api(W+'/task/complete','POST',{task_id:id,note:document.getElementById('m-work').value||'Completed'});
+      toast('Task Completed!','s');
+    }else{
+      toast('Progress updated!','s');
+    }
+    closeModal();
+    loadMyTasks();
+  }else toast('Failed','e');
+}
+
+function calcDays(){
+  var f=document.getElementById('lv-from').value;
+  var t=document.getElementById('lv-to').value;
+  if(f&&t){var d=Math.round((new Date(t)-new Date(f))/(86400000))+1;document.getElementById('lv-days').value=d>0?d:1;}
+}
+
+async function submitLeave(){
+  var from=document.getElementById('lv-from').value;
+  var to=document.getElementById('lv-to').value;
+  var reason=document.getElementById('lv-reason').value;
+  if(!from||!to||!reason){toast('সব field পূরণ করুন','e');return;}
+  toast('Submitting...','i');
+  var r=await api(W+'/leave/request','POST',{employee_id:ME.id,employee_name:ME.name,leave_type:document.getElementById('lv-type').value,from_date:from,to_date:to,total_days:document.getElementById('lv-days').value,reason:reason});
+  if(r!==null){
+    toast('Leave request submitted!','s');
+    document.getElementById('lv-from').value='';
+    document.getElementById('lv-to').value='';
+    document.getElementById('lv-reason').value='';
+    document.getElementById('lv-days').value='';
+    loadLeaveHistory();
+  }else toast('Failed','e');
+}
+
+async function loadLeaveHistory(){
+  var c=document.getElementById('lv-hist');
+  var mine=await sb('/rest/v1/leave_requests?employee_id=eq.'+encodeURIComponent(ME.id)+'&order=id.desc');
+  if(!Array.isArray(mine)){c.innerHTML='<div style="color:var(--danger)">Failed</div>';return;}
+  document.getElementById('d-leaves').textContent=mine.filter(function(l){return l.status==='Approved';}).length;
+  if(!mine.length){c.innerHTML='<div style="color:var(--muted);text-align:center;padding:16px">কোনো request নেই</div>';return;}
+  c.innerHTML=mine.slice(0,6).map(function(l){
+    var s=l.status||'Pending';
+    var bc=s==='Approved'?'b-approved':s==='Rejected'?'b-rejected':'b-pending';
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)">'
+      +'<div><div style="font-weight:600">'+(l.leave_type||'—')+'</div>'
+      +'<div style="font-size:11px;color:var(--muted)">'+(l.from_date||'—')+' to '+(l.to_date||'—')+' ('+(l.total_days||'?')+' days)</div></div>'
+      +'<span class="badge '+bc+'">'+s+'</span></div>';
+  }).join('');
+}
+
+updateCIUI();
+loadMyTasks();
+loadAttHistory();
+(async function(){
+  var leaveMine=await sb('/rest/v1/leave_requests?employee_id=eq.'+encodeURIComponent(ME.id)+'&select=status');
+  if(Array.isArray(leaveMine))document.getElementById('d-leaves').textContent=leaveMine.filter(function(l){return l.status==='Approved';}).length;
+})();
+</script>
+</body>
+</html>
